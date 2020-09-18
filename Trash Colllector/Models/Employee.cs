@@ -11,7 +11,7 @@ namespace Trash_Colllector.Models
     public class Employee
     {
         [Key]
-        public int employeeId { get; set; }
+        public int EmployeeId { get; set; }
         public string firstName { get; set; }
         public string lastName { get; set; }
 
