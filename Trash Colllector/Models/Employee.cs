@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -12,8 +13,12 @@ namespace Trash_Colllector.Models
     {
         [Key]
         public int EmployeeId { get; set; }
+        
         public string firstName { get; set; }
+        [DisplayName("First Name")]
         public string lastName { get; set; }
+        [DisplayName("Last Name")]
+        public string zipCode { get; set; }
 
         [ForeignKey("IdentityUser")]
 

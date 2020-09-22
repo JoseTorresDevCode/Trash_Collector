@@ -31,7 +31,8 @@ namespace Trash_Colllector.Areas.Identity.Pages.Account
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender, RoleManager<IdentityRole> roleManager)
+            IEmailSender emailSender,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -74,7 +75,7 @@ namespace Trash_Colllector.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             var roles = _roleManager.Roles;
-            Roles = new SelectList(roles, "Customer", "Employee");
+            Roles = new SelectList(roles, "Name", "Name");
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)

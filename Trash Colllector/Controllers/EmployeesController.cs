@@ -12,7 +12,7 @@ using Trash_Colllector.Models;
 namespace Trash_Colllector.Controllers
 
 {
-    [Authorize(Roles = "Employees")]
+    [Authorize(Roles = "Employee")]
     public class EmployeesController : Controller
     {
         private readonly ApplicationDbContext _context;
