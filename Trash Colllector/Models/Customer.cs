@@ -12,35 +12,37 @@ namespace Trash_Colllector.Models
     public class Customer
     {
         [Key]
-        public int CustomerId { get; set; } 
-        public string firstName { get; set; }
+        public int CustomerId { get; set; }
+
         [DisplayName("First Name")]
-        public string lastName { get; set; }
+        public string FirstName { get; set; }
+
         [DisplayName("Last Name")]
-        public string address { get; set; }
+        public string LastName { get; set; }
+
         [DisplayName("Address")]
-        public string state { get; set; }
+        public string Address { get; set; }
+
         [DisplayName("State")]
+        public string State { get; set; }
 
-        public int zipCode { get; set; }
         [DisplayName("Zip Code")]
+        public string ZipCode { get; set; }
 
-        public string pickUpDay { get; set; }
         [DisplayName("Weekly Pick Up Day")]
+        public string PickUpDay { get; set; }
 
-        public double balance { get; set; }
         [DisplayName("Balance Owed")]
+        public double Balance { get; set; }
 
-        public string oneTimePickUp { get; set; }
-        [DisplayName("One Time Pick UP Day")]
-
-
+        [DisplayName("One Time Pick Up Day")]
+        public string OneTimePickUp { get; set; }
+         
+        [DisplayName("Confirmed Pickup")]
+        public bool isConfirmed { get; set; }
 
         [ForeignKey("IdentityUser")]
-
-        public string IndentityUserId { get; set; }
+        public string IdentityUserId { get; set; }
         public IdentityUser IdentityUser { get; set; }
-
-
     }
 }

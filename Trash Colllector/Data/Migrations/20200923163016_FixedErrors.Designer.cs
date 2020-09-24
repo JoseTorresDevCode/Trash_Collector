@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Trash_Colllector.Data;
 
 namespace Trash_Colllector.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200923163016_FixedErrors")]
+    partial class FixedErrors
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,22 +50,15 @@ namespace Trash_Colllector.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "76f33ffd-fdcc-4883-ab75-b5cf748ca45d",
-                            ConcurrencyStamp = "207cb46b-dd2c-4260-92dd-a8626065fb82",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "fe9a966b-9dd1-45ba-adc0-b22de43e4c7f",
-                            ConcurrencyStamp = "830a1340-0734-419f-bdc3-d234d7127fb1",
+                            Id = "b3c7e0b9-2b8d-4e72-a0d3-9975edb7b766",
+                            ConcurrencyStamp = "5eb6e4c1-c0c1-4047-b06d-0036f5aff83f",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = "ef60e7bb-f885-4461-af70-e4d5c5accffe",
-                            ConcurrencyStamp = "88d7e97a-b27a-4641-a191-5ceb528d1e5b",
+                            Id = "24dcb781-2ea7-4c15-b62b-6dd5ef479462",
+                            ConcurrencyStamp = "e2f13ee6-ec08-4e78-b7e9-eccc783bc82a",
                             Name = "Employee",
                             NormalizedName = "EMPLOYEE"
                         });
@@ -269,11 +264,8 @@ namespace Trash_Colllector.Data.Migrations
                     b.Property<string>("State")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ZipCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("isConfirmed")
-                        .HasColumnType("bit");
+                    b.Property<int>("ZipCode")
+                        .HasColumnType("int");
 
                     b.HasKey("CustomerId");
 
@@ -298,8 +290,8 @@ namespace Trash_Colllector.Data.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ZipCode")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<double>("ZipCode")
+                        .HasColumnType("float");
 
                     b.HasKey("EmployeeId");
 

@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32.SafeHandles;
 using Trash_Colllector.Data;
 using Trash_Colllector.Models;
 
 namespace Trash_Colllector.Controllers
 
 {
-    [Authorize(Roles = "Employee")]
+    
     public class EmployeesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -22,12 +24,7 @@ namespace Trash_Colllector.Controllers
             _context = context;
         }
 
-        // GET: Employees
-        public async Task<IActionResult> Index()
-        {
-            var applicationDbContext = _context.Employees.Include(e => e.IdentityUser);
-            return View(await applicationDbContext.ToListAsync());
-        }
+       
 
         // GET: Employees/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -48,10 +45,21 @@ namespace Trash_Colllector.Controllers
             return View(employee);
         }
 
+        public IActionResult Index()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var employeeLoggedIn = _context.Employees.Where(e => e.IdentityUserId == userId).SingleOrDefault();
+            List<Customer> customersInZipCode = _context.Customers.Where(c => c.ZipCode == employeeLoggedIn.ZipCode).ToList();
+            var today = DateTime.Now.DayOfWeek.ToString();
+            var customersInZipAndToday = customersInZipCode.Where(c => c.PickUpDay == today).ToList();
+
+            return View();
+        }
+
         // GET: Employees/Create
         public IActionResult Create()
         {
-            ViewData["IndentityUserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
@@ -60,7 +68,7 @@ namespace Trash_Colllector.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EmployeeId,firstName,lastName,IndentityUserId")] Employee employee)
+        public async Task<IActionResult> Create([Bind("EmployeeId,FirstName,LastName,ZipCode,IdentityUserId")] Employee employee)
         {
             if (ModelState.IsValid)
             {
@@ -68,7 +76,7 @@ namespace Trash_Colllector.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IndentityUserId"] = new SelectList(_context.Users, "Id", "Id", employee.IndentityUserId);
+            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", employee.IdentityUserId);
             return View(employee);
         }
 
@@ -85,7 +93,7 @@ namespace Trash_Colllector.Controllers
             {
                 return NotFound();
             }
-            ViewData["IndentityUserId"] = new SelectList(_context.Users, "Id", "Id", employee.IndentityUserId);
+            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", employee.IdentityUserId);
             return View(employee);
         }
 
@@ -94,7 +102,7 @@ namespace Trash_Colllector.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EmployeeId,firstName,lastName,IndentityUserId")] Employee employee)
+        public async Task<IActionResult> Edit(int id, [Bind("EmployeeId,FirstName,LastName,ZipCode,IdentityUserId")] Employee employee)
         {
             if (id != employee.EmployeeId)
             {
@@ -121,7 +129,7 @@ namespace Trash_Colllector.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IndentityUserId"] = new SelectList(_context.Users, "Id", "Id", employee.IndentityUserId);
+            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", employee.IdentityUserId);
             return View(employee);
         }
 

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Trash_Colllector.Data;
 
 namespace Trash_Colllector.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200924112205_Updateddata")]
+    partial class Updateddata
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,24 +50,10 @@ namespace Trash_Colllector.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "76f33ffd-fdcc-4883-ab75-b5cf748ca45d",
-                            ConcurrencyStamp = "207cb46b-dd2c-4260-92dd-a8626065fb82",
+                            Id = "2043f1a3-443b-486a-8f08-3f17e217dcf9",
+                            ConcurrencyStamp = "c3d26829-a62f-471a-90a4-48ccbaae5f97",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "fe9a966b-9dd1-45ba-adc0-b22de43e4c7f",
-                            ConcurrencyStamp = "830a1340-0734-419f-bdc3-d234d7127fb1",
-                            Name = "Customer",
-                            NormalizedName = "CUSTOMER"
-                        },
-                        new
-                        {
-                            Id = "ef60e7bb-f885-4461-af70-e4d5c5accffe",
-                            ConcurrencyStamp = "88d7e97a-b27a-4641-a191-5ceb528d1e5b",
-                            Name = "Employee",
-                            NormalizedName = "EMPLOYEE"
                         });
                 });
 
@@ -279,7 +267,7 @@ namespace Trash_Colllector.Data.Migrations
 
                     b.HasIndex("IdentityUserId");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customer");
                 });
 
             modelBuilder.Entity("Trash_Colllector.Models.Employee", b =>
@@ -305,7 +293,7 @@ namespace Trash_Colllector.Data.Migrations
 
                     b.HasIndex("IdentityUserId");
 
-                    b.ToTable("Employees");
+                    b.ToTable("Employee");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

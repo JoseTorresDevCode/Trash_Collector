@@ -13,16 +13,19 @@ namespace Trash_Colllector.Models
     {
         [Key]
         public int EmployeeId { get; set; }
-        
-        public string firstName { get; set; }
+
         [DisplayName("First Name")]
-        public string lastName { get; set; }
+        public string FirstName { get; set; }
+
         [DisplayName("Last Name")]
-        public string zipCode { get; set; }
+        public string LastName { get; set; } 
+
+        [DisplayName("Zip Code")]
+        public string ZipCode { get; set; } 
 
         [ForeignKey("IdentityUser")]
 
-        public string IndentityUserId { get; set; }
+        public string IdentityUserId { get; set; }
         public IdentityUser IdentityUser { get; set; }
     }
 }

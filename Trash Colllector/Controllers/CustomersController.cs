@@ -11,7 +11,7 @@ using Trash_Colllector.Models;
 
 namespace Trash_Colllector.Controllers
 {
-    [Authorize(Roles = "Customer")]
+    
     public class CustomersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -26,6 +26,7 @@ namespace Trash_Colllector.Controllers
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Customers.Include(c => c.IdentityUser);
+            
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -51,7 +52,7 @@ namespace Trash_Colllector.Controllers
         // GET: Customers/Create
         public IActionResult Create()
         {
-            ViewData["IndentityUserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
@@ -60,7 +61,7 @@ namespace Trash_Colllector.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CustomerId,firstName,lastName,address,state,zipCode,pickUpDay,IndentityUserId")] Customer customer)
+        public async Task<IActionResult> Create([Bind("CustomerId,FirstName,LastName,Address,State,ZipCode,PickUpDay,Balance,OneTimePickuUp,isConfirmed,IdentityUserId")] Customer customer)
         {
             if (ModelState.IsValid)
             {
@@ -68,7 +69,7 @@ namespace Trash_Colllector.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IndentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IndentityUserId);
+            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
             return View(customer);
         }
 
@@ -85,7 +86,7 @@ namespace Trash_Colllector.Controllers
             {
                 return NotFound();
             }
-            ViewData["IndentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IndentityUserId);
+            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
             return View(customer);
         }
 
@@ -94,7 +95,7 @@ namespace Trash_Colllector.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CustomerId,firstName,lastName,address,state,zipCode,pickUpDay,IndentityUserId")] Customer customer)
+        public async Task<IActionResult> Edit(int id, [Bind("CustomerId,FirstName,LastName,Address,State,ZipCode,PickUpDay,Balance,OneTimePickuUp,isConfirmed,IdentityUserId")] Customer customer)
         {
             if (id != customer.CustomerId)
             {
@@ -121,7 +122,7 @@ namespace Trash_Colllector.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IndentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IndentityUserId);
+            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
             return View(customer);
         }
 
