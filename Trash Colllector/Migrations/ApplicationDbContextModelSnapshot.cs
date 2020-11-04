@@ -3,17 +3,15 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Trash_Colllector.Data;
 
-namespace Trash_Colllector.Data.Migrations
+namespace Trash_Colllector.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200922175607_UPDATEDROLES")]
-    partial class UPDATEDROLES
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,17 +48,24 @@ namespace Trash_Colllector.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "49672cd9-038f-4903-9d2f-64923f257741",
-                            ConcurrencyStamp = "1172ad64-0449-4ed1-ad9a-7008d45f437e",
+                            Id = "fae9160b-7654-40cb-af29-ff458a9e4cbd",
+                            ConcurrencyStamp = "adcd4e58-3304-4e81-8c28-4ffc379deab3",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "4b6c5a78-3ea6-40a0-9778-96ac4cd00d82",
+                            ConcurrencyStamp = "a2515897-18eb-441e-92a2-5d8584df721e",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = "8a62de7c-eadb-48b5-b177-4e7d0527488d",
-                            ConcurrencyStamp = "16fec549-c4dd-4c12-b2a3-b802258a4745",
+                            Id = "73588a09-45b8-4794-bc4b-be1db336abb5",
+                            ConcurrencyStamp = "3912bfa4-1777-4ce6-91c2-9d12b78061d5",
                             Name = "Employee",
-                            NormalizedName = "Employee"
+                            NormalizedName = "EMPLOYEE"
                         });
                 });
 
@@ -240,36 +245,39 @@ namespace Trash_Colllector.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("IndentityUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("address")
+                    b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("balance")
+                    b.Property<double>("Balance")
                         .HasColumnType("float");
 
-                    b.Property<string>("firstName")
+                    b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("lastName")
+                    b.Property<string>("IdentityUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("oneTimePickUp")
+                    b.Property<string>("OneTimePickUp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("pickUpDay")
+                    b.Property<string>("PickUpDay")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("state")
+                    b.Property<string>("State")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("zipCode")
-                        .HasColumnType("int");
+                    b.Property<string>("ZipCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isConfirmed")
+                        .HasColumnType("bit");
 
                     b.HasKey("CustomerId");
 
-                    b.HasIndex("IndentityUserId");
+                    b.HasIndex("IdentityUserId");
 
                     b.ToTable("Customers");
                 });
@@ -281,21 +289,21 @@ namespace Trash_Colllector.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("IndentityUserId")
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IdentityUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("firstName")
+                    b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("lastName")
+                    b.Property<string>("ZipCode")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("zipCode")
-                        .HasColumnType("float");
 
                     b.HasKey("EmployeeId");
 
-                    b.HasIndex("IndentityUserId");
+                    b.HasIndex("IdentityUserId");
 
                     b.ToTable("Employees");
                 });
@@ -355,14 +363,14 @@ namespace Trash_Colllector.Data.Migrations
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
                         .WithMany()
-                        .HasForeignKey("IndentityUserId");
+                        .HasForeignKey("IdentityUserId");
                 });
 
             modelBuilder.Entity("Trash_Colllector.Models.Employee", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
                         .WithMany()
-                        .HasForeignKey("IndentityUserId");
+                        .HasForeignKey("IdentityUserId");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,24 +24,22 @@ namespace Trash_Colllector.Controllers
         }
 
         // GET: Customers
-        public async Task<IActionResult> Index()
+        public ActionResult Index()
         {
-            var applicationDbContext = _context.Customers.Include(c => c.IdentityUser);
+            var userId = this.User.FindFirstValue(System.Security.Claims.ClaimTypes.NameIdentifier);
+            var customer = _context.Customers.Where(c => c.IdentityUserId == userId);
             
-            return View(await applicationDbContext.ToListAsync());
+            if (customer == null)
+            {
+                return RedirectToAction("Create");
+            }
+            return RedirectToAction("Details", customer);
         }
 
         // GET: Customers/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public  IActionResult Details(Customer customer)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var customer = await _context.Customers
-                .Include(c => c.IdentityUser)
-                .FirstOrDefaultAsync(m => m.CustomerId == id);
+            //customer.PickUpDay = _context.PickUpDays.Find(customer.PickUpDayId);
             if (customer == null)
             {
                 return NotFound();
