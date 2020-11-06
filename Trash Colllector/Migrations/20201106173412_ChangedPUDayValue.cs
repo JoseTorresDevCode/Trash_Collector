@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Trash_Colllector.Migrations
 {
-    public partial class Initial : Migration
+    public partial class ChangedPUDayValue : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -64,7 +64,7 @@ namespace Trash_Colllector.Migrations
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -85,7 +85,7 @@ namespace Trash_Colllector.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -105,7 +105,7 @@ namespace Trash_Colllector.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -123,13 +123,13 @@ namespace Trash_Colllector.Migrations
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -149,7 +149,7 @@ namespace Trash_Colllector.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -161,13 +161,16 @@ namespace Trash_Colllector.Migrations
                     FirstName = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true),
                     Address = table.Column<string>(nullable: true),
+                    City = table.Column<string>(nullable: true),
                     State = table.Column<string>(nullable: true),
                     ZipCode = table.Column<string>(nullable: true),
-                    PickUpDay = table.Column<string>(nullable: true),
+                    PickUpDay = table.Column<int>(nullable: false),
                     Balance = table.Column<double>(nullable: false),
                     OneTimePickUp = table.Column<string>(nullable: true),
                     isConfirmed = table.Column<bool>(nullable: false),
-                    IdentityUserId = table.Column<string>(nullable: true)
+                    IdentityUserId = table.Column<string>(nullable: true),
+                    Lat = table.Column<double>(nullable: false),
+                    Long = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -205,17 +208,12 @@ namespace Trash_Colllector.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "fae9160b-7654-40cb-af29-ff458a9e4cbd", "adcd4e58-3304-4e81-8c28-4ffc379deab3", "Admin", "ADMIN" });
+                values: new object[] { "6c3c5da4-7e8e-4041-bb48-9568e38bf053", "7fae42f7-2585-48d0-bfc8-d09d01a475d1", "Customer", "CUSTOMER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "4b6c5a78-3ea6-40a0-9778-96ac4cd00d82", "a2515897-18eb-441e-92a2-5d8584df721e", "Customer", "CUSTOMER" });
-
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "73588a09-45b8-4794-bc4b-be1db336abb5", "3912bfa4-1777-4ce6-91c2-9d12b78061d5", "Employee", "EMPLOYEE" });
+                values: new object[] { "007997ba-1fbd-4354-b27e-50d92abab67d", "d0fbb105-f628-44ee-83b8-66318f22f2a9", "Employee", "EMPLOYEE" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

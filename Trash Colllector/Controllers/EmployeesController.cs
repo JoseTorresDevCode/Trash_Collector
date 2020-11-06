@@ -27,16 +27,11 @@ namespace Trash_Colllector.Controllers
        
 
         // GET: Employees/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public ActionResult Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var userId = this.User.FindFirstValue(System.Security.Claims.ClaimTypes.NameIdentifier);
+            var employee = _context.Employees.Where(p => p.IdentityUserId == userId).SingleOrDefault();
 
-            var employee = await _context.Employees
-                .Include(e => e.IdentityUser)
-                .FirstOrDefaultAsync(m => m.EmployeeId == id);
             if (employee == null)
             {
                 return NotFound();
@@ -47,13 +42,25 @@ namespace Trash_Colllector.Controllers
 
         public IActionResult Index()
         {
-            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var employeeLoggedIn = _context.Employees.Where(e => e.IdentityUserId == userId).SingleOrDefault();
-            List<Customer> customersInZipCode = _context.Customers.Where(c => c.ZipCode == employeeLoggedIn.ZipCode).ToList();
-            var today = DateTime.Now.DayOfWeek.ToString();
-            var customersInZipAndToday = customersInZipCode.Where(c => c.PickUpDay == today).ToList();
+            var userId = this.User.FindFirstValue(System.Security.Claims.ClaimTypes.NameIdentifier);
+            var employeeLoggedIn = _context.Employees.Where(c => c.IdentityUserId == userId).SingleOrDefault();
 
-            return View();
+            if (employeeLoggedIn == null)
+            {
+                return RedirectToAction("Create");
+            }
+            else
+            {
+                var customers = _context.Customers.Where(e => e.IdentityUserId == userId).SingleOrDefault();
+                var customersInZipCode = _context.Customers.Where(c => c.ZipCode == employeeLoggedIn.ZipCode).ToList();
+                var today = DateTime.Now.DayOfWeek;
+                var customersInZipAndToday = customersInZipCode.Where(c => c.PickUpDay == today).ToList();
+
+                return View(customersInZipAndToday);
+            }
+
+
+
         }
 
         // GET: Employees/Create
@@ -68,10 +75,12 @@ namespace Trash_Colllector.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EmployeeId,FirstName,LastName,ZipCode,IdentityUserId")] Employee employee)
+        public async Task<IActionResult> Create(Employee employee)
         {
             if (ModelState.IsValid)
             {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                employee.IdentityUserId = userId;
                 _context.Add(employee);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -162,10 +171,90 @@ namespace Trash_Colllector.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        public async Task<IActionResult> CustomerOverview(int id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var customer = await _context.Customers.FindAsync(id);
+            if (customer == null)
+            {
+                return NotFound();
+            }
+            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
+            return View(customer);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CustomerOverview(int id,Customer customer)
+        {
+            if (id != customer.CustomerId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(customer);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!CustomerExists(customer.CustomerId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
+            return View(customer);
+        }
+        public IActionResult CustomerList(string searchString)
+        {
+            var userId = this.User.FindFirstValue(System.Security.Claims.ClaimTypes.NameIdentifier);
+            var employeeLoggedIn = _context.Employees.Where(c => c.IdentityUserId == userId).SingleOrDefault();
+
+            if (employeeLoggedIn == null)
+            {
+                return RedirectToAction("Create");
+            }
+            else
+            {
+                var customers = _context.Customers.Where(e => e.IdentityUserId == userId).SingleOrDefault();
+                var customersInZipCode = _context.Customers.Where(c => c.ZipCode == employeeLoggedIn.ZipCode).ToList();
+                
+                var customer = from s in _context.Customers
+                             select s;
+
+                if (!string.IsNullOrEmpty(searchString))
+                {
+                    customer = customer.Where(c => c.PickUpDay.Equals(searchString));
+
+                }
+
+                return View(customersInZipCode);
+            }
+
+
+
+        }
 
         private bool EmployeeExists(int id)
         {
             return _context.Employees.Any(e => e.EmployeeId == id);
+        }
+        private bool CustomerExists(int id)
+        {
+            return _context.Customers.Any(e => e.CustomerId == id);
         }
     }
 }

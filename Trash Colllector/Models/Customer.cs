@@ -23,6 +23,8 @@ namespace Trash_Colllector.Models
         [DisplayName("Address")]
         public string Address { get; set; }
 
+        public string City { get; set; }
+
         [DisplayName("State")]
         public string State { get; set; }
 
@@ -30,7 +32,7 @@ namespace Trash_Colllector.Models
         public string ZipCode { get; set; }
 
         [DisplayName("Weekly Pick Up Day")]
-        public string PickUpDay { get; set; }
+        public DayOfWeek PickUpDay { get; set; }
 
         [DisplayName("Balance Owed")]
         public double Balance { get; set; }
@@ -44,5 +46,8 @@ namespace Trash_Colllector.Models
         [ForeignKey("IdentityUser")]
         public string IdentityUserId { get; set; }
         public IdentityUser IdentityUser { get; set; }
+
+        public double Lat { get; set; }
+        public double Long { get; set; }
     }
 }

@@ -10,8 +10,8 @@ using Trash_Colllector.Data;
 namespace Trash_Colllector.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201104165609_Initial")]
-    partial class Initial
+    [Migration("20201106173412_ChangedPUDayValue")]
+    partial class ChangedPUDayValue
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -50,22 +50,15 @@ namespace Trash_Colllector.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "fae9160b-7654-40cb-af29-ff458a9e4cbd",
-                            ConcurrencyStamp = "adcd4e58-3304-4e81-8c28-4ffc379deab3",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "4b6c5a78-3ea6-40a0-9778-96ac4cd00d82",
-                            ConcurrencyStamp = "a2515897-18eb-441e-92a2-5d8584df721e",
+                            Id = "6c3c5da4-7e8e-4041-bb48-9568e38bf053",
+                            ConcurrencyStamp = "7fae42f7-2585-48d0-bfc8-d09d01a475d1",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = "73588a09-45b8-4794-bc4b-be1db336abb5",
-                            ConcurrencyStamp = "3912bfa4-1777-4ce6-91c2-9d12b78061d5",
+                            Id = "007997ba-1fbd-4354-b27e-50d92abab67d",
+                            ConcurrencyStamp = "d0fbb105-f628-44ee-83b8-66318f22f2a9",
                             Name = "Employee",
                             NormalizedName = "EMPLOYEE"
                         });
@@ -253,6 +246,9 @@ namespace Trash_Colllector.Migrations
                     b.Property<double>("Balance")
                         .HasColumnType("float");
 
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
@@ -262,11 +258,17 @@ namespace Trash_Colllector.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<double>("Lat")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Long")
+                        .HasColumnType("float");
+
                     b.Property<string>("OneTimePickUp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PickUpDay")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("PickUpDay")
+                        .HasColumnType("int");
 
                     b.Property<string>("State")
                         .HasColumnType("nvarchar(max)");
@@ -315,7 +317,7 @@ namespace Trash_Colllector.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -324,7 +326,7 @@ namespace Trash_Colllector.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -333,7 +335,7 @@ namespace Trash_Colllector.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -342,13 +344,13 @@ namespace Trash_Colllector.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -357,7 +359,7 @@ namespace Trash_Colllector.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -365,14 +367,16 @@ namespace Trash_Colllector.Migrations
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
                         .WithMany()
-                        .HasForeignKey("IdentityUserId");
+                        .HasForeignKey("IdentityUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Trash_Colllector.Models.Employee", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
                         .WithMany()
-                        .HasForeignKey("IdentityUserId");
+                        .HasForeignKey("IdentityUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

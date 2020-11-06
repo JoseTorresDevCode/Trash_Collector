@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using Trash_Colllector.Data;
 using Trash_Colllector.Models;
 
@@ -27,7 +29,7 @@ namespace Trash_Colllector.Controllers
         public ActionResult Index()
         {
             var userId = this.User.FindFirstValue(System.Security.Claims.ClaimTypes.NameIdentifier);
-            var customer = _context.Customers.Where(c => c.IdentityUserId == userId);
+            var customer = _context.Customers.Where(c => c.IdentityUserId == userId).SingleOrDefault();
             
             if (customer == null)
             {
@@ -37,9 +39,11 @@ namespace Trash_Colllector.Controllers
         }
 
         // GET: Customers/Details/5
-        public  IActionResult Details(Customer customer)
+        public  IActionResult Details(int? id)
         {
-            //customer.PickUpDay = _context.PickUpDays.Find(customer.PickUpDayId);
+            var userId = this.User.FindFirstValue(System.Security.Claims.ClaimTypes.NameIdentifier);
+            var customer = _context.Customers.Where(p => p.IdentityUserId == userId).SingleOrDefault();
+
             if (customer == null)
             {
                 return NotFound();
@@ -51,7 +55,7 @@ namespace Trash_Colllector.Controllers
         // GET: Customers/Create
         public IActionResult Create()
         {
-            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id");
+           
             return View();
         }
 
@@ -60,15 +64,28 @@ namespace Trash_Colllector.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CustomerId,FirstName,LastName,Address,State,ZipCode,PickUpDay,Balance,OneTimePickuUp,isConfirmed,IdentityUserId")] Customer customer)
+        public async Task<IActionResult> Create(Customer customer)
         {
+            string url = $"https://maps.googleapis.com/maps/api/geocode/json?address={customer.Address},+{customer.City},+{customer.State},{customer.ZipCode}&key={Trash_Colllector.API.APIKeys.GeocodeKey}";
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = await client.GetAsync(url);
+            string jsonResult = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                JObject geoCode = JObject.Parse(jsonResult);
+                customer.Lat = (double)geoCode["results"][0]["geometry"]["location"]["lat"];
+
+                customer.Long = (double)geoCode["results"][0]["geometry"]["location"]["lng"];
+            }
             if (ModelState.IsValid)
             {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                customer.IdentityUserId = userId;
                 _context.Add(customer);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
+           // ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", customer.IdentityUserId);
             return View(customer);
         }
 

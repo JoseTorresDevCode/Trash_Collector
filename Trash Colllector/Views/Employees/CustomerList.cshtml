@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<Trash_Colllector.Models.Customer>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "CustomerList";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Customer Overview</h1>
 
 
 <table class="table">
@@ -45,7 +45,12 @@
             <th></th>
         </tr>
     </thead>
-    
+    <form asp-controller="Employees" asp-action="CustomerList">
+        <p>
+            Customer Search: <input type="text" name="SearchString">
+            <input type="submit" value="Filter" />
+        </p>
+    </form>
     <tbody>
         @foreach (var item in Model)
         {
@@ -81,11 +86,7 @@
                     @Html.DisplayFor(modelItem => item.isConfirmed)
                 </td>
 
-                <td>
-                    <a asp-action="CustomerOverview" asp-route-id="@item.CustomerId">Confirm Pick Up</a> 
 
-
-                </td>
             </tr>
         }
     </tbody>

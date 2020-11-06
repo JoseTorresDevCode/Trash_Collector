@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Policy;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
@@ -33,10 +34,18 @@ namespace Trash_Colllector.Data
                 NormalizedName = "EMPLOYEE"
             }
             );
+            foreach (var relationship in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            {
+                relationship.DeleteBehavior = DeleteBehavior.Restrict;
+            }
+
+            base.OnModelCreating(builder);
         }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Employee> Employees { get; set; }
-        public DbSet<PickUpDay> PickUpDays { get; set; }
+        
+
+
     }
     
     
