@@ -24,7 +24,9 @@ namespace Trash_Colllector.Controllers
             _context = context;
         }
 
-       
+        
+
+        
 
         // GET: Employees/Details/5
         public ActionResult Details(int? id)
@@ -49,6 +51,7 @@ namespace Trash_Colllector.Controllers
             {
                 return RedirectToAction("Create");
             }
+           
             else
             {
                 var customers = _context.Customers.Where(e => e.IdentityUserId == userId).SingleOrDefault();
@@ -188,7 +191,7 @@ namespace Trash_Colllector.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CustomerOverview(int id,Customer customer)
+        public async Task<IActionResult> CustomerOverview(int id, [Bind("CustomerId,FirstName,LastName,Address,City,State,ZipCode,PickUpDay,Balance,OneTimePickuUp,isConfirmed,IdentityUserId,Lat,Long")] Customer customer)
         {
             if (id != customer.CustomerId)
             {
@@ -207,6 +210,10 @@ namespace Trash_Colllector.Controllers
                     if (!CustomerExists(customer.CustomerId))
                     {
                         return NotFound();
+                    }
+                    if (customer.isConfirmed == true)
+                    {
+                        customer.Balance = 50;
                     }
                     else
                     {
@@ -247,7 +254,13 @@ namespace Trash_Colllector.Controllers
 
 
         }
-
+        public IActionResult CustomerDetails(int? id)
+        {
+            {
+                var getCustomer = _context.Customers.Where(c => c.CustomerId == id).SingleOrDefault();
+                return View(getCustomer);
+            }
+        }
         private bool EmployeeExists(int id)
         {
             return _context.Employees.Any(e => e.EmployeeId == id);
